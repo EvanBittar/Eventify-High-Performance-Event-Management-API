@@ -8,30 +8,32 @@ namespace Eventify_High_Performance_Event_Management_API.Data
     public class DataContext
     {
         private readonly IConfiguration _config;
+        private readonly string? _connectionString;
         public DataContext(IConfiguration config)
         {
             _config = config;
+            _connectionString = _config.GetConnectionString("DefaultConnection");
         }
 
-        public IEnumerable<T> LoadData<T>(string sql)
+        public async Task<IEnumerable<T>> LoadData<T>(string sql , object? sqlParameter = null)
         {
-            IDbConnection db = new SqlConnection(_config.GetConnectionString("DefaultConnection"));
-            return db.Query<T>(sql);
+            using IDbConnection db = new SqlConnection(_connectionString);
+            return await  db.QueryAsync<T>(sql,sqlParameter);
         }
-        public T LoadDataSingle<T>(string sql)
+        public async Task<T?> LoadDataSingle<T>(string sql, object? sqlParameter = null)
         {
-            IDbConnection db = new SqlConnection(_config.GetConnectionString("DefaultConnection"));
-            return db.QuerySingle<T>(sql);
+            using IDbConnection db = new SqlConnection(_connectionString);
+        return await db.QuerySingleOrDefaultAsync<T>(sql, sqlParameter);
         }
-        public bool ExecuteSql(string sql)
+        public async Task<bool> ExecuteSql(string sql, object? sqlParameter = null)
         {
-            IDbConnection db = new SqlConnection(_config.GetConnectionString("DefaultConnection"));
-            return db.Execute(sql) > 0;
+            using IDbConnection db = new SqlConnection(_connectionString);
+            return await db.ExecuteAsync(sql, sqlParameter) > 0;
         }
-        public int ExecuteSqlWithCountRow(string sql)
+        public async Task<int> ExecuteSqlWithCountRow(string sql, object? sqlParameter = null)
         {
-            IDbConnection db = new SqlConnection(_config.GetConnectionString("DefaultConnection"));
-            return db.Execute(sql);
+            using IDbConnection db = new SqlConnection(_connectionString);
+            return await db.ExecuteAsync(sql, sqlParameter);
         }
     }
 }

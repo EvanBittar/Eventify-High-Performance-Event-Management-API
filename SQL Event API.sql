@@ -40,14 +40,38 @@
 --     FOREIGN KEY (UserId) REFERENCES Event.Users(UserId)
 -- )
 GO
-INSERT INTO Event.Users(
+INSERT INTO Event.Users
+    (
     FirstName ,
     LastName ,
     Email ,
     PasswordHash ,
     IsAdmin ,
-    CreatedAt ) VALUES(
+    CreatedAt )
+VALUES(
         'Admin', 'User', 'admin@example.com', 'hashed_password', 1, GETDATE()
     )
 GO
 SELECT * FROM Event.Users
+GO
+SELECT [EventId],
+    [CategoryId],
+    [MaxAttendees],
+    [Title],
+    [Description],
+    [Location],
+    [StartDate],
+    [EndDate],
+    [CreatedBy],
+    [CreatedAt]
+FROM Event.Events
+GO
+SELECT [CategoryId],
+       [NameCategory]
+FROM Event.Categories
+GO
+SELECT e.*,c.NameCategory FROM Event.Events AS e JOIN Event.Categories AS c ON e.CategoryId = c.CategoryId
+GO
+INSERT INTO Event.Categories (NameCategory) 
+VALUES ('Technology'), ('Music'), ('Sports'), ('Education');
+GO

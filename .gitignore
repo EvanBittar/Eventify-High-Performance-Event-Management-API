@@ -1,0 +1,11 @@
+# Ignore build artifacts
+bin/
+obj/
+
+# Ignore user-specific files
+.vs/
+.idea/
+*.user
+
+# Ignore settings that might contain passwords
+appsettings.Development.json

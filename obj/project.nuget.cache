@@ -1,9 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "Wa14eHgoAeU=",
+  "dgSpecHash": "xnxhQXA2HqY=",
   "success": true,
   "projectFilePath": "C:\\Users\\LOQ\\Desktop\\api\\Eventify-High-Performance-Event-Management-API\\Eventify-High-Performance-Event-Management-API.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\LOQ\\.nuget\\packages\\bcrypt.net-next\\4.1.0\\bcrypt.net-next.4.1.0.nupkg.sha512",
     "C:\\Users\\LOQ\\.nuget\\packages\\dapper\\2.1.72\\dapper.2.1.72.nupkg.sha512",
     "C:\\Users\\LOQ\\.nuget\\packages\\microsoft.aspnetcore.openapi\\10.0.5\\microsoft.aspnetcore.openapi.10.0.5.nupkg.sha512",
     "C:\\Users\\LOQ\\.nuget\\packages\\microsoft.bcl.cryptography\\9.0.13\\microsoft.bcl.cryptography.9.0.13.nupkg.sha512",

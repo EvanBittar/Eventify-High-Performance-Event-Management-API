@@ -75,3 +75,5 @@ GO
 INSERT INTO Event.Categories (NameCategory) 
 VALUES ('Technology'), ('Music'), ('Sports'), ('Education');
 GO
+ALTER TABLE Event.Bookings 
+ADD CONSTRAINT UQ_User_Event UNIQUE (UserId, EventId);

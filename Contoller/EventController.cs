@@ -15,7 +15,7 @@ namespace Eventify_High_Performance_Event_Management_API.Contoller
             _dapper = new DataContext(configuration);
         }
         [HttpGet("SearchEvents")]
-        public async Task<IEnumerable<dynamic>> SearchEvents(string? title = null)
+        public async Task<IEnumerable<dynamic>> SearchEvents(string? title = null , int? CategoryId = null)
         {
             string sql = @"SELECT e.*,c.NameCategory 
                 FROM Event.Events AS e 
@@ -23,7 +23,7 @@ namespace Eventify_High_Performance_Event_Management_API.Contoller
                 WHERE (@Title IS NULL OR e.Title LIKE '%' + @Title + '%')
                 AND (@CategoryId IS NULL OR e.CategoryId = @CategoryId)";
 
-            return await _dapper.LoadData<dynamic>(sql, new { Title = title });
+            return await _dapper.LoadData<dynamic>(sql, new { Title = title  , CategoryId = CategoryId });
         }
         [HttpPost("AddEvent")]
         public async Task<IActionResult> AddEvent(EventToAddDto eventToAddDto)

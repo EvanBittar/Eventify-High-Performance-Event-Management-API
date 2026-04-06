@@ -77,3 +77,10 @@ VALUES ('Technology'), ('Music'), ('Sports'), ('Education');
 GO
 ALTER TABLE Event.Bookings 
 ADD CONSTRAINT UQ_User_Event UNIQUE (UserId, EventId);
+GO
+-- INSERT INTO Event.Bookings (EventId, UserId, BookingDate, Status)
+-- VALUES (1, 1, GETDATE(), 1);
+-- GO
+-- SELECT * FROM Event.Users
+-- SELECT * FROM Event.Bookings
+-- SELECT * FROM Event.Events

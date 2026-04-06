@@ -20,7 +20,8 @@ namespace Eventify_High_Performance_Event_Management_API.Contoller
             string sql = @"SELECT e.*,c.NameCategory 
                 FROM Event.Events AS e 
                 JOIN Event.Categories AS c ON e.CategoryId = c.CategoryId
-                WHERE (@Title IS NULL OR e.Title LIKE '%' + @Title + '%')";
+                WHERE (@Title IS NULL OR e.Title LIKE '%' + @Title + '%')
+                AND (@CategoryId IS NULL OR e.CategoryId = @CategoryId)";
 
             return await _dapper.LoadData<dynamic>(sql, new { Title = title });
         }

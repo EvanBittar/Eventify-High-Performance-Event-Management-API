@@ -4,6 +4,10 @@ using Eventify_High_Performance_Event_Management_API.Models;
 using Microsoft.AspNetCore.Mvc;
 using BCrypt.Net;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 
 namespace Eventify_High_Performance_Event_Management_API.Contoller
 {
@@ -12,9 +16,11 @@ namespace Eventify_High_Performance_Event_Management_API.Contoller
     public class UserController : ControllerBase
     {
         private readonly DataContext _dapper;
+        private readonly IConfiguration _config;
         public UserController(IConfiguration configuration)
         {
-            _dapper = new DataContext(configuration);
+            _config = configuration;
+            _dapper = new DataContext(_config);
         }
         [HttpGet("test")]
         public async Task<IActionResult> Test()
@@ -88,10 +94,30 @@ namespace Eventify_High_Performance_Event_Management_API.Contoller
             {
                 return BadRequest("Invalid email or password");
             }
-            return Ok(new {
-            Message = "Login Successful!",
-            User = new { user.FirstName, user.LastName, user.IsAdmin }
-        });
+            var claim = new[]
+            {
+                new Claim(ClaimTypes.NameIdentifier, user.UserId.ToString()),
+                new Claim(ClaimTypes.Email, user.Email),
+                new Claim("IsAdmin", user.IsAdmin.ToString())
+            };
+            
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config.GetSection("AppSettings:PasswordKey").Value!));
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
+
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(claim),
+                Expires = DateTime.Now.AddDays(1),
+                SigningCredentials = creds
+            };
+
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+
+            return Ok(new
+            {
+                token = tokenHandler.WriteToken(token)
+            });
         }
     }
 }

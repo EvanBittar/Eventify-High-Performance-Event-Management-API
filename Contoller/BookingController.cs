@@ -18,7 +18,7 @@ namespace Eventify_High_Performance_Event_Management_API.Contoller
 
             if (UserId == null) return Unauthorized("User not authenticated.");
 
-            int userId = int.Parse(UserId);    
+            int userId = int.Parse(UserId);
             string sql = @"SELECT (SELECT MaxAttendees FROM Event.Events WHERE EventId = @EventId) AS MaxCapacity,
                 (SELECT COUNT(*) FROM Event.Bookings WHERE EventId = @EventId AND Status = 1) AS CurrentBookings";
             var result = await _dapper.LoadDataSingle<dynamic>(sql, new { EventId = eventId });
@@ -41,8 +41,34 @@ namespace Eventify_High_Performance_Event_Management_API.Contoller
             {
                 return BadRequest("You have already booked this event.");
             }
-           
+
             return BadRequest("Failed to complete booking.");
+        }
+        [HttpDelete("CancelBooking")]
+        public async Task<IActionResult> CancelBooking(int bookingId)
+        {
+            var UserId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (UserId == null) return Unauthorized("User not authenticated.");
+
+            if (bookingId <= 0) return BadRequest("Invalid booking ID.");
+
+            int userId = int.Parse(UserId);
+
+            string updateSql = @"UPDATE
+             Event.Bookings 
+             SET Status = 2 
+             WHERE BookingId = @BookingId 
+             AND UserId = @UserId
+             AND Status = 1";
+
+            bool result = await _dapper.ExecuteSql(updateSql, new { BookingId = bookingId, UserId = userId });
+
+            if (result)
+            {
+                return Ok("Booking cancelled successfully.");
+
+            }
+            return BadRequest("Could not cancel booking. It may not exist or is already cancelled.");
         }
     }
 }

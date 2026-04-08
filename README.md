@@ -21,3 +21,47 @@ Role-Based Access Control (RBAC): Distinct permissions for 'Admins' (event creat
 Data Integrity: Implementation of SQL Constraints and C# Validations to ensure business rules (e.g., event capacity, valid dates) are never violated.
 
 "I built Eventify to master high-performance data access in C#. I chose Dapper over EF Core because I wanted total control over the execution plan and to ensure the system could handle high-concurrency booking scenarios without data corruption.
+# 🎟️ Eventify - High-Performance Event Management API
+
+A robust, secure, and high-performance RESTful API built with **.NET Core** and **Dapper**, designed to manage events, categories, and user bookings. This project demonstrates backend best practices, including Role-Based Access Control (RBAC), raw SQL optimization, and strict data integrity.
+
+## 🚀 Tech Stack
+* **Framework:** C# / .NET Core 8.0 (Web API)
+* **Database:** Microsoft SQL Server
+* **ORM:** Dapper (Micro-ORM chosen for maximum query execution speed)
+* **Security:** JWT (JSON Web Tokens) Authentication & Authorization
+
+## ✨ Key Features & Engineering Highlights
+
+### 🔐 Security & Identity (JWT)
+* Secure User Registration and Login with encrypted tokens.
+* **Role-Based Access Control (RBAC):** Distinct endpoints for `Admin` and standard `User` using Token Claims.
+* Zero trust architecture: `UserId` is securely extracted directly from the JWT claims, never from the request body, preventing ID manipulation.
+
+### 📅 Smart Booking System
+* **Capacity Management:** Real-time validation checks event capacity (`MaxAttendees`) before confirming a booking.
+* **Double-Booking Prevention:** Handled at both the application level and database level using `UNIQUE Constraints` and `try-catch` blocks.
+* **Status Tracking:** Bookings maintain state (Confirmed, Cancelled) without hard-deleting records.
+
+### 🛡️ Data Integrity & Admin Controls
+* **Orphaned Data Prevention:** Deleting a Category automatically checks for associated active events, blocking the deletion to maintain database integrity.
+* **Optimized Database Calls:** Merged validation and update logic into single trips to the database using sub-queries and efficient `WHERE` clauses.
+
+### 📊 Complex Data Retrieval
+* **My Tickets Endpoint:** Utilizes complex **Triple SQL Joins** (`Bookings` ➔ `Events` ➔ `Categories`) to deliver a rich, flattened data view to the frontend in a single query.
+
+Execute the SQL scripts located in the /Scripts folder to create the Event schema and necessary tables (Users, Categories, Events, Bookings).
+
+Configure Settings:
+
+Open appsettings.json and update your DefaultConnection string.
+
+Ensure the AppSettings:PasswordKey is set for JWT generation.
+
+Run the API:
+
+Bash
+dotnet watch run
+Explore via Swagger:
+
+Navigate to http://localhost:5000/swagger. Use the /api/Users/Login endpoint to get a token, click the Authorize button, and paste your token (prefix with Bearer ).

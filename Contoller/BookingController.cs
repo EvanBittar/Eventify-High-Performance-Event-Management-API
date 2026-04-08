@@ -1,5 +1,6 @@
 using System.Security.Claims;
 using Eventify_High_Performance_Event_Management_API.Data;
+using Eventify_High_Performance_Event_Management_API.Dtos;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -69,6 +70,29 @@ namespace Eventify_High_Performance_Event_Management_API.Contoller
 
             }
             return BadRequest("Could not cancel booking. It may not exist or is already cancelled.");
+        }
+        [HttpGet("GetMyTickets")]
+        public async Task<IActionResult> GetMyTickets()
+        {
+            var UserId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (UserId == null) return Unauthorized("User not authenticated.");
+
+            int userId = int.Parse(UserId);
+
+            string sql = @"SELECT 
+                    b.BookingId , 
+                    e.Title , 
+                    e.StartDate , 
+                    e.Location ,
+                    c.NameCategory ,
+                    b.Status
+                    FROM Event.Bookings AS b
+                    JOIN Event.Events AS e ON b.EventId = e.EventId
+                    JOIN Event.Categories AS c ON e.CategoryId = c.CategoryId
+                    WHERE b.UserId = @UserId AND b.Status <> 2";
+            
+            var myTickets = await _dapper.LoadData<BookingViewDto>(sql, new {UserId = userId});
+            return Ok(myTickets);
         }
     }
 }

@@ -84,3 +84,10 @@ GO
 -- SELECT * FROM Event.Users
 -- SELECT * FROM Event.Bookings
 -- SELECT * FROM Event.Events
+-- SELECT TOP (@TopN) 
+--             e.Title, 
+--             COUNT(b.BookingId) AS BookingCount
+--         FROM Event.Events AS e
+--         LEFT JOIN Event.Bookings AS b ON e.EventId = b.EventId
+--         GROUP BY e.EventId, e.Title
+--         ORDER BY BookingCount DESC

@@ -3,7 +3,7 @@ using Eventify_High_Performance_Event_Management_API.Dtos;
 using Eventify_High_Performance_Event_Management_API.Models;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Eventify_High_Performance_Event_Management_API.Contoller
+namespace Eventify_High_Performance_Event_Management_API.Contorller
 {
     [ApiController]
     [Route("api/[controller]")]

@@ -8,6 +8,8 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using Eventify_High_Performance_Event_Management_API.Repository.Interfaces;
+using Eventify_High_Performance_Event_Management_API.Repository;
 
 namespace Eventify_High_Performance_Event_Management_API.Controller
 {
@@ -17,22 +19,33 @@ namespace Eventify_High_Performance_Event_Management_API.Controller
     {
         private readonly DataContext _dapper;
         private readonly IConfiguration _config;
+        private readonly IUserRepository _userRepository;
         public UserController(IConfiguration configuration)
         {
             _config = configuration;
             _dapper = new DataContext(_config);
+            _userRepository = new UserRepository(_config);
+
         }
         [HttpGet("test")]
         public async Task<IActionResult> Test()
         {
             return Ok(await _dapper.LoadData<DateTime>("SELECT GETDATE()"));
         }
+
         [HttpGet("GetUsers")]
         public async Task<IActionResult> GetUsers()
         {
             var sql = "SELECT * FROM Event.Users";
             var users = await _dapper.LoadData<User>(sql);
             return Ok(users);
+        }
+        [HttpGet("GetUserById/{id}")]
+        public async Task<IActionResult> GetUserById(int id)
+        {
+            var user = await _userRepository.GetUserByIdAsync(id);
+            if (user == null) return NotFound("User not found");
+            return Ok(user);
         }
         [HttpPost("AddUsers")]
         public async Task<IActionResult> AddUsers(UserToAddDto user)

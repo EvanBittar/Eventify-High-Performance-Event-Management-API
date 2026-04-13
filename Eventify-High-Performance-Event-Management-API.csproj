@@ -21,7 +21,10 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
+  <Compile Remove="Eventify.Tests\**" />
+  <EmbeddedResource Remove="Eventify.Tests\**" />
+  <None Remove="Eventify.Tests\**" />
+
   </ItemGroup>
 
 </Project>
-<!-- Eventify-High-Performance-Event-Management-API -->

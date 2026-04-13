@@ -4,7 +4,7 @@ using Eventify_High_Performance_Event_Management_API.Dtos;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Eventify_High_Performance_Event_Management_API.Contorller
+namespace Eventify_High_Performance_Event_Management_API.Controller
 {
     [ApiController]
     [Route("api/[controller]")]

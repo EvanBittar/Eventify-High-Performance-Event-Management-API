@@ -9,7 +9,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
-namespace Eventify_High_Performance_Event_Management_API.Contorller
+namespace Eventify_High_Performance_Event_Management_API.Controller
 {
     [ApiController]
     [Route("api/[controller]")]

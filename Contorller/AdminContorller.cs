@@ -2,12 +2,12 @@ using Eventify_High_Performance_Event_Management_API.Data;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Eventify_High_Performance_Event_Management_API.Contoller
+namespace Eventify_High_Performance_Event_Management_API.Controller
 {
     [Route("api/[controller]")]
     [ApiController]
     [Authorize]
-    public class AdminContorller(IConfiguration config) : ControllerBase
+    public class AdminController(IConfiguration config) : ControllerBase
     {
         private readonly DataContext _dapper = new(config);
 

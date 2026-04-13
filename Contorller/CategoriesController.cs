@@ -3,7 +3,7 @@ using Eventify_High_Performance_Event_Management_API.Data;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Eventify_High_Performance_Event_Management_API.Contorller
+namespace Eventify_High_Performance_Event_Management_API.Controller
 {
     [ApiController]
     [Authorize]

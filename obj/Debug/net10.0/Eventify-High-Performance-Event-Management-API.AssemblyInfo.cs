@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Eventify-High-Performance-Event-Management-API")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+f17d10cbd0f431d8c97ba3792dba0a06198b3bb2")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+8cc84f22a434e4047fedf06e9306132599210285")]
 [assembly: System.Reflection.AssemblyProductAttribute("Eventify-High-Performance-Event-Management-API")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Eventify-High-Performance-Event-Management-API")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

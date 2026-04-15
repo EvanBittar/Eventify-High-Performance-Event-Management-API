@@ -17,11 +17,4 @@
     <PackageReference Include="Swashbuckle.AspNetCore.Filters" Version="10.0.1" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Compile Remove="Eventify.Tests\**" />
-    <Content Remove="Eventify.Tests\**" />
-    <EmbeddedResource Remove="Eventify.Tests\**" />
-    <None Remove="Eventify.Tests\**" />
-  </ItemGroup>
-
 </Project>

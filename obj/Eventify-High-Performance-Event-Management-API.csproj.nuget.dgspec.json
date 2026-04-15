@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\LOQ\\Desktop\\api\\Eventify-High-Performance-Event-Management-API\\Eventify-High-Performance-Event-Management-API.csproj": {}
+    "c:\\Users\\LOQ\\Desktop\\api\\Eventify-High-Performance-Event-Management-API\\Eventify-High-Performance-Event-Management-API.csproj": {}
   },
   "projects": {
-    "C:\\Users\\LOQ\\Desktop\\api\\Eventify-High-Performance-Event-Management-API\\Eventify-High-Performance-Event-Management-API.csproj": {
+    "c:\\Users\\LOQ\\Desktop\\api\\Eventify-High-Performance-Event-Management-API\\Eventify-High-Performance-Event-Management-API.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\LOQ\\Desktop\\api\\Eventify-High-Performance-Event-Management-API\\Eventify-High-Performance-Event-Management-API.csproj",
+        "projectUniqueName": "c:\\Users\\LOQ\\Desktop\\api\\Eventify-High-Performance-Event-Management-API\\Eventify-High-Performance-Event-Management-API.csproj",
         "projectName": "Eventify-High-Performance-Event-Management-API",
-        "projectPath": "C:\\Users\\LOQ\\Desktop\\api\\Eventify-High-Performance-Event-Management-API\\Eventify-High-Performance-Event-Management-API.csproj",
+        "projectPath": "c:\\Users\\LOQ\\Desktop\\api\\Eventify-High-Performance-Event-Management-API\\Eventify-High-Performance-Event-Management-API.csproj",
         "packagesPath": "C:\\Users\\LOQ\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\LOQ\\Desktop\\api\\Eventify-High-Performance-Event-Management-API\\obj\\",
+        "outputPath": "c:\\Users\\LOQ\\Desktop\\api\\Eventify-High-Performance-Event-Management-API\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\LOQ\\AppData\\Roaming\\NuGet\\NuGet.Config"

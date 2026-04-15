@@ -22,10 +22,10 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-  <!-- <Compile Remove="Eventify.Tests\**" />
+  <Compile Remove="Eventify.Tests\**" />
+  <Content Remove="Eventify.Tests\**" />
   <EmbeddedResource Remove="Eventify.Tests\**" />
-  <None Remove="Eventify.Tests\**" /> -->
-
+  <None Remove="Eventify.Tests\**" />
   </ItemGroup>
 
 </Project>

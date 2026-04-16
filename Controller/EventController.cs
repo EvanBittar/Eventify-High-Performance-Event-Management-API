@@ -1,4 +1,3 @@
-using Eventify_High_Performance_Event_Management_API.Data;
 using Eventify_High_Performance_Event_Management_API.Dtos;
 using Eventify_High_Performance_Event_Management_API.Models;
 using Eventify_High_Performance_Event_Management_API.Repository.Interfaces;
@@ -10,11 +9,9 @@ namespace Eventify_High_Performance_Event_Management_API.Controller
     [Route("api/[controller]")]
     public class EventController : ControllerBase
     {
-        private readonly DataContext _dapper;
         private readonly IEventRepository _eventRepository;
-        public EventController(IConfiguration configuration, IEventRepository eventRepository)
+        public EventController (IEventRepository eventRepository)
         {
-            _dapper = new DataContext(configuration);
             _eventRepository = eventRepository;
         }
         [HttpGet("GetAllEvents")]

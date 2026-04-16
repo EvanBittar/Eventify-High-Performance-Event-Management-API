@@ -43,6 +43,7 @@ namespace Eventify_High_Performance_Event_Management_API.Repository
                 AND (@CategoryId IS NULL OR e.CategoryId = @CategoryId)";
 
             return await _dapper.LoadData<dynamic>(sql, new { Title = title, CategoryId = CategoryId });
+            
         }
         public async Task<bool> UpdateEventAsync(int id, EventToAddDto eventToAddDto)
         {

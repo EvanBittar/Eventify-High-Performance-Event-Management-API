@@ -26,9 +26,10 @@ namespace Eventify_High_Performance_Event_Management_API.Controller
             return await _eventRepository.GetEventByIdAsync(id);
         }
         [HttpGet("SearchEvents")]
-        public async Task<IEnumerable<dynamic>> SearchEvents(string? title = null , int? CategoryId = null)
+        public async Task<IActionResult> SearchEvents(string? title = null , int? CategoryId = null)
         {
-            return await _eventRepository.SearchEvents(title, CategoryId);
+            var events = await _eventRepository.SearchEvents(title, CategoryId);
+            return Ok(events);
         }
         [HttpPost("AddEvent")]
         public async Task<IActionResult> AddEvent(EventToAddDto eventToAddDto)

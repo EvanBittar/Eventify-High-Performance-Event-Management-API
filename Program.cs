@@ -1,4 +1,5 @@
 using System.Text;
+using Eventify_High_Performance_Event_Management_API.Data;
 using Eventify_High_Performance_Event_Management_API.Repository;
 using Eventify_High_Performance_Event_Management_API.Repository.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -49,7 +50,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidateAudience = false
         };
     });
-
+builder.Services.AddScoped<DataContext>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IEventRepository, EventRepository>();
 var app = builder.Build();

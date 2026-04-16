@@ -15,9 +15,10 @@ namespace Eventify_High_Performance_Event_Management_API.Controller
             _eventRepository = eventRepository;
         }
         [HttpGet("GetAllEvents")]
-        public async Task<IEnumerable<dynamic>> GetAllEvents()
+        public async Task<IActionResult> GetAllEvents()
         {
-            return await _eventRepository.GetAllEventsAsync();
+            var events = await _eventRepository.GetAllEventsAsync();
+            return Ok(events);
         }
         [HttpGet("GetAllEventsById/{id}")]
         public async Task<Event?> GetAllEventsById(int id)

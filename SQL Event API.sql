@@ -101,3 +101,27 @@ FROM Event.Events e;
 UPDATE Event.Events 
 SET StartDate = DATEADD(month, 1, GETDATE()),
     EndDate = DATEADD(month, 1, DATEADD(day, 1, GETDATE())); 
+GO
+CREATE TABLE Event.Reviews (
+    ReviewId INT PRIMARY KEY IDENTITY(1,1),
+    EventId INT NOT NULL,
+    UserId INT NOT NULL,
+    Rating TINYINT NOT NULL CHECK (Rating >= 1 AND Rating <= 5),
+    Comment NVARCHAR(255),
+    ReviewDate DATETIME DEFAULT GETDATE(),
+    FOREIGN KEY (EventId) REFERENCES Event.Events(EventId),
+    FOREIGN KEY (UserId) REFERENCES Event.Users(UserId)
+);
+GO
+
+IF EXISTS (SELECT 1 FROM Event.bookings WHERE EventId = @EventId AND UserId = @UserId)
+BEGIN
+    INSERT INTO Event.Reviews (EventId, UserId, Rating, Comment)
+    VALUES (@EventId, @UserId, @Rating, @Comment);
+    SELECT 'Success';
+END
+ELSE 
+BEGIN
+    SELECT 'You must book the event before reviewing it';
+END
+GO

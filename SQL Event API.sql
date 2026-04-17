@@ -91,3 +91,13 @@ GO
 --         LEFT JOIN Event.Bookings AS b ON e.EventId = b.EventId
 --         GROUP BY e.EventId, e.Title
 --         ORDER BY BookingCount DESC
+SELECT 
+    EventId, 
+    Title, 
+    MaxAttendees, 
+    (SELECT COUNT(*) FROM Event.Bookings WHERE EventId = e.EventId) AS CurrentBookings,
+    CASE WHEN StartDate > GETDATE() THEN 'Future' ELSE 'Past' END AS TimeStatus
+FROM Event.Events e;
+UPDATE Event.Events 
+SET StartDate = DATEADD(month, 1, GETDATE()),
+    EndDate = DATEADD(month, 1, DATEADD(day, 1, GETDATE())); 

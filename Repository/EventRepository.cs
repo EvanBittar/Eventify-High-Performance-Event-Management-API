@@ -89,13 +89,35 @@ namespace Eventify_High_Performance_Event_Management_API.Repository
                 eventToAddDto.Title,
                 eventToAddDto.Description,
                 eventToAddDto.Location,
-                eventToAddDto.StartDate, 
+                eventToAddDto.StartDate,
                 eventToAddDto.EndDate,
                 eventToAddDto.MaxAttendees,
                 eventToAddDto.CategoryId,
                 eventToAddDto.CreatedBy,
-                eventToAddDto.Price 
+                eventToAddDto.Price
             });
+        }
+        public async Task<DashboardStatsDto?> GetDashboardStatsAsync()
+        {
+            string sql = @"
+        SELECT 
+            (SELECT ISNULL(SUM(e.Price), 0) 
+             FROM Event.Bookings b 
+             JOIN Event.Events e ON b.EventId = e.EventId) AS TotalRevenue,
+            
+            (SELECT COUNT(*) FROM Event.Bookings) AS TotalBookings,
+            
+            (SELECT COUNT(*) FROM Event.Events WHERE StartDate > GETDATE()) AS ActiveEvents,
+            
+            (SELECT COUNT(*) FROM Event.Users) AS TotalUsers,
+            
+            ISNULL((SELECT TOP 1 e.Title 
+              FROM Event.Events e
+              JOIN Event.Reviews r ON e.EventId = r.EventId
+              GROUP BY e.EventId, e.Title
+              ORDER BY AVG(CAST(r.Rating AS DECIMAL)) DESC), 'No Reviews Yet') AS TopRatedEvent";
+
+            return await _dapper.LoadDataSingle<DashboardStatsDto>(sql, new { });
         }
     }
 }

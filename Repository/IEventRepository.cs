@@ -11,5 +11,6 @@ namespace Eventify_High_Performance_Event_Management_API.Repository.Interfaces
         Task<bool> CreateEventAsync(EventToAddDto eventToAddDto);
         Task<IEnumerable<dynamic>> SearchEvents(string? title = null , int? CategoryId = null);
         Task<bool> UpdateEventAsync(int id, EventToAddDto eventToAddDto);
+        Task<DashboardStatsDto?> GetDashboardStatsAsync();
     }
 }

@@ -114,29 +114,29 @@ CREATE TABLE Event.Reviews (
 );
 GO
 
-IF EXISTS (SELECT 1 FROM Event.bookings WHERE EventId = @EventId AND UserId = @UserId)
-BEGIN
-    INSERT INTO Event.Reviews (EventId, UserId, Rating, Comment)
-    VALUES (@EventId, @UserId, @Rating, @Comment);
-    SELECT 'Success';
-END
-ELSE 
-BEGIN
-    SELECT 'You must book the event before reviewing it';
-END
-GO
+-- IF EXISTS (SELECT 1 FROM Event.bookings WHERE EventId = @EventId AND UserId = @UserId)
+-- BEGIN
+--     INSERT INTO Event.Reviews (EventId, UserId, Rating, Comment)
+--     VALUES (@EventId, @UserId, @Rating, @Comment);
+--     SELECT 'Success';
+-- END
+-- ELSE 
+-- BEGIN
+--     SELECT 'You must book the event before reviewing it';
+-- END
+-- GO
 ALTER TABLE Event.Events
 ADD Price DECIMAL(10, 2) DEFAULT 0.00;
 GO
-SELECT 
-    e.EventId, 
-    e.Title, 
-    e.StartDate, 
-    e.Location,
-    e.Price,
-    ISNULL(AVG(CAST(r.Rating AS DECIMAL(10,2))), 0) AS AverageRating,
-    COUNT(r.ReviewId) AS ReviewsCount
-FROM Event.Events AS e
-LEFT JOIN Event.Reviews AS r ON e.EventId = r.EventId
-GROUP BY 
-    e.EventId, e.Title, e.StartDate, e.Location, e.Price;
+-- SELECT 
+--     e.EventId, 
+--     e.Title, 
+--     e.StartDate, 
+--     e.Location,
+--     e.Price,
+--     ISNULL(AVG(CAST(r.Rating AS DECIMAL(10,2))), 0) AS AverageRating,
+--     COUNT(r.ReviewId) AS ReviewsCount
+-- FROM Event.Events AS e
+-- LEFT JOIN Event.Reviews AS r ON e.EventId = r.EventId
+-- GROUP BY 
+--     e.EventId, e.Title, e.StartDate, e.Location, e.Price;

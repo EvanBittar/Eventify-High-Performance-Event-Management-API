@@ -9,9 +9,15 @@ namespace Eventify_High_Performance_Event_Management_API.Controller
     [ApiController]
     [Route("api/[controller]")]
     [Authorize]
-    public class BookingController(IBookingRepository bookingRepository) : ControllerBase
+    public class BookingController : ControllerBase
     {
-        private readonly IBookingRepository _bookingRepository = bookingRepository;
+        private readonly IBookingRepository _bookingRepository;
+        private readonly IEmailService _emailService;
+        public BookingController(IBookingRepository bookingRepository, IEmailService emailService)
+        {
+            _bookingRepository = bookingRepository;
+            _emailService = emailService;
+        }
 
         [HttpDelete("CancelBooking/{bookingId}")]
         public async Task<IActionResult> CancelBooking(int bookingId)
@@ -48,9 +54,20 @@ namespace Eventify_High_Performance_Event_Management_API.Controller
             };
 
             var result = await _bookingRepository.CreateBookingAsync(booking);
-
             if (result == "Success")
-                return Ok(new { Message = "Booking created successfully." });
+            {
+
+                var userEmail = User.FindFirst(ClaimTypes.Email)?.Value;
+
+                if (!string.IsNullOrEmpty(userEmail))
+                {
+                    _ = _emailService.SendEmailAsync(userEmail,
+                        "Booking Confirmed! 🎟️",
+                        $"<h1>Success!</h1><p>Your booking for event ID {booking.EventId} is confirmed. See you there!</p>");
+                }
+
+                return Ok(new { Message = "Booking successful and email sent." });
+            }
 
             return BadRequest(new { Message = result });
         }

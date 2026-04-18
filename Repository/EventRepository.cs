@@ -17,7 +17,18 @@ namespace Eventify_High_Performance_Event_Management_API.Repository
 
         public async Task<IEnumerable<Event>> GetAllEventsAsync()
         {
-            string sql = "SELECT * FROM Event.Events";
+            string sql = @"SELECT 
+            e.EventId, 
+            e.Title, 
+            e.StartDate, 
+            e.Location,
+            e.Price,
+            ISNULL(AVG(CAST(r.Rating AS DECIMAL(10,2))), 0) AS AverageRating,
+            COUNT(r.ReviewId) AS ReviewsCount
+            FROM Event.Events AS e
+            LEFT JOIN Event.Reviews AS r ON e.EventId = r.EventId
+            GROUP BY 
+            e.EventId, e.Title, e.StartDate, e.Location, e.Price";
             return await _dapper.LoadData<Event>(sql, new { });
         }
 
@@ -29,21 +40,26 @@ namespace Eventify_High_Performance_Event_Management_API.Repository
 
         public async Task<bool> CreateEventAsync(EventToAddDto eventToAddDto)
         {
-            string sql = @"INSERT INTO Event.Events (Title, Description, Location, StartDate, EndDate, MaxAttendees, CategoryId, CreatedBy)
-                VALUES (@Title, @Description, @Location, @StartDate, @EndDate, @MaxAttendees, @CategoryId, @CreatedBy)";
+            string sql = @"INSERT INTO Event.Events (Title, Description, Location, StartDate, EndDate, MaxAttendees, CategoryId, CreatedBy,Price)
+                VALUES (@Title, @Description, @Location, @StartDate, @EndDate, @MaxAttendees, @CategoryId, @CreatedBy,@price)";
 
             return await _dapper.ExecuteSql(sql, eventToAddDto);
         }
         public async Task<IEnumerable<dynamic>> SearchEvents(string? title = null, int? CategoryId = null)
         {
-            string sql = @"SELECT e.*,c.NameCategory 
-                FROM Event.Events AS e 
-                JOIN Event.Categories AS c ON e.CategoryId = c.CategoryId
-                WHERE (@Title IS NULL OR e.Title LIKE '%' + @Title + '%')
-                AND (@CategoryId IS NULL OR e.CategoryId = @CategoryId)";
+            string sql = @"SELECT 
+            e.EventId, e.Title, e.Location, e.Price, e.StartDate, c.NameCategory,
+            ISNULL(AVG(CAST(r.Rating AS DECIMAL(10,2))), 0) AS AverageRating,
+            COUNT(r.ReviewId) AS ReviewsCount
+            FROM Event.Events AS e 
+            JOIN Event.Categories AS c ON e.CategoryId = c.CategoryId
+            LEFT JOIN Event.Reviews AS r ON e.EventId = r.EventId
+            WHERE (@Title IS NULL OR e.Title LIKE '%' + @Title + '%')
+            AND (@CategoryId IS NULL OR e.CategoryId = @CategoryId)
+            GROUP BY e.EventId, e.Title, e.Location, e.Price, e.StartDate, c.NameCategory";
 
             return await _dapper.LoadData<dynamic>(sql, new { Title = title, CategoryId = CategoryId });
-            
+
         }
         public async Task<bool> UpdateEventAsync(int id, EventToAddDto eventToAddDto)
         {
@@ -56,15 +72,16 @@ namespace Eventify_High_Performance_Event_Management_API.Repository
             }
 
             string sql = @"UPDATE Event.Events 
-        SET Title = @Title, 
-            Description = @Description, 
-            Location = @Location, 
-            StartDate = GETDATE(), 
-            EndDate = @EndDate, 
-            MaxAttendees = @MaxAttendees, 
-            CategoryId = @CategoryId, 
-            CreatedBy = @CreatedBy 
-        WHERE EventId = @EventId";
+                SET Title = @Title, 
+                    Description = @Description, 
+                    Location = @Location, 
+                    StartDate = @StartDate, 
+                    EndDate = @EndDate, 
+                    MaxAttendees = @MaxAttendees, 
+                    CategoryId = @CategoryId, 
+                    CreatedBy = @CreatedBy,
+                    Price = @Price -- أضفنا السعر هنا
+                WHERE EventId = @EventId";
 
             return await _dapper.ExecuteSql(sql, new
             {
@@ -72,10 +89,12 @@ namespace Eventify_High_Performance_Event_Management_API.Repository
                 eventToAddDto.Title,
                 eventToAddDto.Description,
                 eventToAddDto.Location,
+                eventToAddDto.StartDate, 
                 eventToAddDto.EndDate,
                 eventToAddDto.MaxAttendees,
                 eventToAddDto.CategoryId,
-                eventToAddDto.CreatedBy
+                eventToAddDto.CreatedBy,
+                eventToAddDto.Price 
             });
         }
     }

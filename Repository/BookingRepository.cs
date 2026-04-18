@@ -15,7 +15,7 @@ namespace Eventify_High_Performance_Event_Management_API.Repository
         }
         public async Task<IEnumerable<dynamic>> GetUserBookingsAsync(int userId)
         {
-            string sql = @"SELECT b.BookingId , e.Title , e.StartDate , e.Location ,c.NameCategory ,
+            string sql = @"SELECT b.BookingId , e.Title , e.StartDate , e.Location ,c.NameCategory, e.Price, ,
                     b.Status
                     FROM Event.Bookings AS b
                     JOIN Event.Events AS e ON b.EventId = e.EventId

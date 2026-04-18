@@ -6,7 +6,7 @@ namespace Eventify_High_Performance_Event_Management_API.Repository
     public class ReviewRepository : IReviewRepository
     {
         private readonly DataContext _dapper;
-        ReviewRepository(DataContext data)
+        public ReviewRepository(DataContext data)
         {
             _dapper = data;
         }
@@ -21,8 +21,7 @@ namespace Eventify_High_Performance_Event_Management_API.Repository
                     ELSE 
                     BEGIN
                         SELECT 'You must book the event before reviewing it';
-                    END
-                    GO";
+                    END";
             var result = await _dapper.LoadDataSingle<string>(sql, new
             {
                 reviewDto.EventId,

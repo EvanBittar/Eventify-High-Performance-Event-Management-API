@@ -1,3 +1,4 @@
+using Eventify_High_Performance_Event_Management_API.Helpers;
 using Eventify_High_Performance_Event_Management_API.Middlewares;
 using Microsoft.OpenApi;
 using Swashbuckle.AspNetCore.Filters;
@@ -23,7 +24,10 @@ builder.Services.AddCors(options => {
     options.AddPolicy("DevCors", b => b.WithOrigins("http://localhost:4200").AllowAnyMethod().AllowAnyHeader().AllowCredentials());
     options.AddPolicy("ProdCors", b => b.WithOrigins("https://myProductionSite.com").AllowAnyMethod().AllowAnyHeader().AllowCredentials());
 });
-
+builder.Services.AddAutoMapper(cfg => 
+{
+    cfg.AddProfile<MappingProfiles>();
+});
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

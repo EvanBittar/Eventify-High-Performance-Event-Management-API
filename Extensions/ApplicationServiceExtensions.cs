@@ -22,9 +22,11 @@ public static class ApplicationServiceExtensions
         // 2. Services
         services.AddScoped<IAuthService, AuthService>();
         services.AddScoped<IEmailService, EmailService>();
-        
-        // 3. Helpers
-        services.AddAutoMapper(typeof(MappingProfiles).Assembly);
+
+        services.AddAutoMapper(cfg =>
+        {
+            cfg.AddProfile<MappingProfiles>();
+        });
 
         return services;
     }
@@ -32,8 +34,10 @@ public static class ApplicationServiceExtensions
     public static IServiceCollection AddIdentityServices(this IServiceCollection services, IConfiguration config)
     {
         services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-            .AddJwtBearer(options => {
-                options.TokenValidationParameters = new TokenValidationParameters {
+            .AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
                     ValidateIssuerSigningKey = true,
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config.GetSection("AppSettings:PasswordKey").Value!)),
                     ValidateIssuer = false,

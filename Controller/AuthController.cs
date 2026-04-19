@@ -6,7 +6,7 @@ namespace Eventify_High_Performance_Event_Management_API.Controller
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AuthController
+    public class AuthController : ControllerBase
     {
         private readonly IAuthRepository _authRepo;
         private readonly IEmailService _emailService;

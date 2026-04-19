@@ -1,6 +1,7 @@
 using System.Security.Claims;
 using Eventify_High_Performance_Event_Management_API.Dtos;
 using Eventify_High_Performance_Event_Management_API.Repository;
+using Eventify_High_Performance_Event_Management_API.Repository.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,10 +14,12 @@ namespace Eventify_High_Performance_Event_Management_API.Controller
     {
         private readonly IBookingRepository _bookingRepository;
         private readonly IEmailService _emailService;
-        public BookingController(IBookingRepository bookingRepository, IEmailService emailService)
+        private readonly IUserRepository _userRepo;
+        public BookingController(IBookingRepository bookingRepository, IEmailService emailService, IUserRepository userRepo )
         {
             _bookingRepository = bookingRepository;
             _emailService = emailService;
+            _userRepo = userRepo;
         }
 
         [HttpDelete("CancelBooking/{bookingId}")]
@@ -42,6 +45,7 @@ namespace Eventify_High_Performance_Event_Management_API.Controller
             return Ok(bookings);
         }
         [HttpPost("CreateBooking")]
+        [Authorize]
         public async Task<IActionResult> CreateBooking(int eventId)
         {
             var UserId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
@@ -52,7 +56,14 @@ namespace Eventify_High_Performance_Event_Management_API.Controller
                 EventId = eventId,
                 UserId = int.Parse(UserId)
             };
+            int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
 
+            var user = await _userRepo.GetUserByIdAsync(userId);
+
+            if (user == null || !user.IsVerified)
+            {
+                return BadRequest("Your email is not verified. Please verify your email to book events.");
+            }
             var result = await _bookingRepository.CreateBookingAsync(booking);
             if (result == "Success")
             {

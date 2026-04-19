@@ -3,6 +3,8 @@ using Eventify_High_Performance_Event_Management_API.Data;
 using Eventify_High_Performance_Event_Management_API.Middlewares;
 using Eventify_High_Performance_Event_Management_API.Repository;
 using Eventify_High_Performance_Event_Management_API.Repository.Interfaces;
+using Eventify_High_Performance_Event_Management_API.Services;
+using Eventify_High_Performance_Event_Management_API.Services.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi;
@@ -58,6 +60,7 @@ builder.Services.AddScoped<IReviewRepository, ReviewRepository>();
 builder.Services.AddScoped<IBookingRepository, BookingRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IEventRepository, EventRepository>();
+builder.Services.AddScoped<IAuthService, AuthService>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

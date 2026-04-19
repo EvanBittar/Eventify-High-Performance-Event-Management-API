@@ -1,9 +1,11 @@
 {
   "version": 2,
-  "dgSpecHash": "L6qsg1zUycM=",
+  "dgSpecHash": "3FRLsZdtqxs=",
   "success": true,
   "projectFilePath": "C:\\Users\\LOQ\\Desktop\\api\\Eventify-High-Performance-Event-Management-API\\Eventify-High-Performance-Event-Management-API.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\LOQ\\.nuget\\packages\\automapper\\16.1.1\\automapper.16.1.1.nupkg.sha512",
+    "C:\\Users\\LOQ\\.nuget\\packages\\automapper.extensions.microsoft.dependencyinjection\\12.0.1\\automapper.extensions.microsoft.dependencyinjection.12.0.1.nupkg.sha512",
     "C:\\Users\\LOQ\\.nuget\\packages\\bcrypt.net-next\\4.1.0\\bcrypt.net-next.4.1.0.nupkg.sha512",
     "C:\\Users\\LOQ\\.nuget\\packages\\dapper\\2.1.72\\dapper.2.1.72.nupkg.sha512",
     "C:\\Users\\LOQ\\.nuget\\packages\\microsoft.aspnetcore.authentication.jwtbearer\\10.0.5\\microsoft.aspnetcore.authentication.jwtbearer.10.0.5.nupkg.sha512",
@@ -35,5 +37,18 @@
     "C:\\Users\\LOQ\\.nuget\\packages\\system.security.cryptography.pkcs\\9.0.13\\system.security.cryptography.pkcs.9.0.13.nupkg.sha512",
     "C:\\Users\\LOQ\\.nuget\\packages\\system.security.cryptography.protecteddata\\9.0.13\\system.security.cryptography.protecteddata.9.0.13.nupkg.sha512"
   ],
-  "logs": []
+  "logs": [
+    {
+      "code": "NU1608",
+      "level": "Warning",
+      "message": "Detected package version outside of dependency constraint: AutoMapper.Extensions.Microsoft.DependencyInjection 12.0.1 requires AutoMapper (= 12.0.1) but version AutoMapper 16.1.1 was resolved.",
+      "projectPath": "C:\\Users\\LOQ\\Desktop\\api\\Eventify-High-Performance-Event-Management-API\\Eventify-High-Performance-Event-Management-API.csproj",
+      "warningLevel": 1,
+      "filePath": "C:\\Users\\LOQ\\Desktop\\api\\Eventify-High-Performance-Event-Management-API\\Eventify-High-Performance-Event-Management-API.csproj",
+      "libraryId": "AutoMapper",
+      "targetGraphs": [
+        "net10.0"
+      ]
+    }
+  ]
 }

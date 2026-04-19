@@ -1,7 +1,7 @@
 using Eventify_High_Performance_Event_Management_API.Dtos;
 using Eventify_High_Performance_Event_Management_API.Models;
 
-namespace Eventify_High_Performance_Event_Management_API.Repository
+namespace Eventify_High_Performance_Event_Management_API.Repository.Interfaces
 {
     public interface IBookingRepository
     {

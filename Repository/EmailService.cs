@@ -1,6 +1,7 @@
 using System.Net;
 using System.Net.Mail;
 using Eventify_High_Performance_Event_Management_API.Repository;
+using Eventify_High_Performance_Event_Management_API.Repository.Interfaces;
 
 public class EmailService(IConfiguration config) : IEmailService
 {

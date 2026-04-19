@@ -1,5 +1,6 @@
 using System.Text;
 using Eventify_High_Performance_Event_Management_API.Data;
+using Eventify_High_Performance_Event_Management_API.Helpers;
 using Eventify_High_Performance_Event_Management_API.Middlewares;
 using Eventify_High_Performance_Event_Management_API.Repository;
 using Eventify_High_Performance_Event_Management_API.Repository.Interfaces;
@@ -61,6 +62,7 @@ builder.Services.AddScoped<IBookingRepository, BookingRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IEventRepository, EventRepository>();
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddAutoMapper(typeof(MappingProfiles).Assembly);
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

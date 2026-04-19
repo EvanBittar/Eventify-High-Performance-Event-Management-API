@@ -3,6 +3,7 @@ using Eventify_High_Performance_Event_Management_API.Models;
 using Microsoft.AspNetCore.Mvc;
 using Eventify_High_Performance_Event_Management_API.Repository.Interfaces;
 using Eventify_High_Performance_Event_Management_API.Services.Interfaces;
+using AutoMapper;
 
 namespace Eventify_High_Performance_Event_Management_API.Controller
 {
@@ -10,10 +11,12 @@ namespace Eventify_High_Performance_Event_Management_API.Controller
     [Route("api/[controller]")]
     public class UserController : ControllerBase
     {
+        private readonly IMapper _mapper;
         private readonly IUserRepository _userRepository;
         private readonly IAuthService _authService;
-        public UserController(IUserRepository userRepository, IAuthService authService)
+        public UserController(IUserRepository userRepository, IAuthService authService, IMapper mapper)
         {
+            _mapper = mapper;
             _userRepository = userRepository;
             _authService = authService;
         }
@@ -27,14 +30,18 @@ namespace Eventify_High_Performance_Event_Management_API.Controller
         public async Task<IActionResult> GetUsers()
         {
             var users = await _userRepository.GetAllUsersAsync();
-            return Ok(users);
+
+            var usersToReturn = _mapper.Map<IEnumerable<UserToReturnDto>>(users);
+
+            return Ok(usersToReturn);
         }
         [HttpGet("GetUserById/{id}")]
         public async Task<IActionResult> GetUserById(int id)
         {
             var user = await _userRepository.GetUserByIdAsync(id);
             if (user == null) return NotFound("User not found");
-            return Ok(user);
+
+            return Ok(_mapper.Map<UserToReturnDto>(user));
         }
         [HttpPost("GetUserByEmailAsync")]
         public async Task<IActionResult> GetUserByEmailAsync(string email)
@@ -47,26 +54,19 @@ namespace Eventify_High_Performance_Event_Management_API.Controller
         [HttpPost("Register")]
         public async Task<IActionResult> Register(UserToAddDto userToAddDto)
         {
-            var existingUser = await _userRepository.GetUserByEmailAsync(userToAddDto.Email);
-            if (existingUser != null)
-            {
+            if (await _userRepository.GetUserByEmailAsync(userToAddDto.Email) != null)
                 return BadRequest("Email already exists");
-            }
-            string passwordHash = _authService.HashPassword(userToAddDto.PasswordHash);
 
-            var parameters = new User
-            {
-                FirstName = userToAddDto.FirstName,
-                LastName = userToAddDto.LastName,
-                Email = userToAddDto.Email,
-                PasswordHash = passwordHash,
-                IsAdmin = false,
-                IsVerified = false
-            };
-            bool result = await _userRepository.AddUserAsync(parameters);
+            var user = _mapper.Map<User>(userToAddDto);
 
-            if (result) return Ok("User registered successfully");
-            return StatusCode(500, "Something went wrong while saving the user.");
+            user.PasswordHash = _authService.HashPassword(userToAddDto.PasswordHash);
+            user.IsVerified = false;
+
+            if (await _userRepository.AddUserAsync(user))
+                return Ok("User registered successfully");
+
+            return BadRequest("Failed to register user");
+            // return StatusCode(500, "Something went wrong while saving the user.");
             // return await _userRepository.GetUserByEmailAsync(userToAddDto.Email) != null ? Ok("User registered successfully") : BadRequest("Failed to register user");
         }
         [HttpPost("Login")]

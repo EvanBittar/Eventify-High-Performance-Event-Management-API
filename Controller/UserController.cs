@@ -52,7 +52,8 @@ namespace Eventify_High_Performance_Event_Management_API.Controller
         [HttpPost("Register")]
         public async Task<IActionResult> Register(UserToAddDto userToAddDto)
         {
-            if(_userRepository.GetUserByEmailAsync(userToAddDto.Email) != null)
+            var existingUser = await _userRepository.GetUserByEmailAsync(userToAddDto.Email);
+            if (existingUser != null)
             {
                 return BadRequest("Email already exists");
             }
@@ -64,7 +65,8 @@ namespace Eventify_High_Performance_Event_Management_API.Controller
                 LastName = userToAddDto.LastName,
                 Email = userToAddDto.Email,
                 PasswordHash = passwordHash,
-                IsAdmin = false
+                IsAdmin = false,
+                IsVerified = false
             };
             bool result = await _userRepository.AddUserAsync(parameters);
 
@@ -76,24 +78,23 @@ namespace Eventify_High_Performance_Event_Management_API.Controller
         public async Task<IActionResult> Login(UserToLoginDto userLogin)
         {
             var user = await _userRepository.GetUserByEmailAsync(userLogin.Email);
-            if (user == null)
+            if (user == null || !BCrypt.Net.BCrypt.Verify(userLogin.Password, user.PasswordHash))
             {
                 return BadRequest("Invalid email or password");
             }
 
-            bool isPasswordValid = BCrypt.Net.BCrypt.Verify(userLogin.Password, user.PasswordHash);
-            if (!isPasswordValid)
-            {
-                return BadRequest("Invalid email or password");
-            }
             var claim = new[]
             {
                 new Claim(ClaimTypes.NameIdentifier, user.UserId.ToString()),
                 new Claim(ClaimTypes.Email, user.Email),
+                new Claim("IsVerified", user.IsVerified.ToString()),
                 new Claim("IsAdmin", user.IsAdmin.ToString())
             };
-            
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config.GetSection("AppSettings:PasswordKey").Value!));
+
+            var keyString = _config.GetSection("AppSettings:PasswordKey").Value;
+            if (string.IsNullOrEmpty(keyString)) return StatusCode(500, "Server configuration error");
+
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(keyString));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
 
             var tokenDescriptor = new SecurityTokenDescriptor

@@ -1,5 +1,6 @@
 using System.Text;
 using Eventify_High_Performance_Event_Management_API.Data;
+using Eventify_High_Performance_Event_Management_API.Middlewares;
 using Eventify_High_Performance_Event_Management_API.Repository;
 using Eventify_High_Performance_Event_Management_API.Repository.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -75,6 +76,7 @@ else
 app.UseAuthentication();
 app.UseAuthorization();
 
+app.UseMiddleware<EmailVerificationMiddleware>();
 app.MapControllers();
 
 app.Run();

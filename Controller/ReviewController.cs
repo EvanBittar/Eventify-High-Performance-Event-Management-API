@@ -1,6 +1,6 @@
 using System.Security.Claims;
 using Eventify_High_Performance_Event_Management_API.Dtos;
-using Eventify_High_Performance_Event_Management_API.Repository;
+using Eventify_High_Performance_Event_Management_API.Repository.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

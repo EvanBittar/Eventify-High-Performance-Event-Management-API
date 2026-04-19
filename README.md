@@ -65,3 +65,5 @@ dotnet watch run
 Explore via Swagger:
 
 Navigate to http://localhost:5000/swagger. Use the /api/Users/Login endpoint to get a token, click the Authorize button, and paste your token (prefix with Bearer ).
+<img width="1915" height="988" alt="Screenshot 2026-04-18 122454" src="https://github.com/user-attachments/assets/9a09dd01-1977-4677-9137-acbbf8b2bed6" />
+<img width="1914" height="987" alt="Screenshot 2026-04-18 122437" src="https://github.com/user-attachments/assets/fe6e8882-a9bd-47ff-8ff5-b26887d3a084" />

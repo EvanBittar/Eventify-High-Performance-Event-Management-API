@@ -140,3 +140,8 @@ GO
 -- LEFT JOIN Event.Reviews AS r ON e.EventId = r.EventId
 -- GROUP BY 
 --     e.EventId, e.Title, e.StartDate, e.Location, e.Price;
+ALTER TABLE Event.Users
+ADD VerificationCode NVARCHAR(6) NULL ,
+    CodeExpiration DATETIME NULL,
+    IsVerified BIT NOT NULL DEFAULT 0,
+    ResetCode NVARCHAR(6) NULL;

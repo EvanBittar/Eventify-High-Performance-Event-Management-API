@@ -29,13 +29,18 @@ namespace Eventify_High_Performance_Event_Management_API.Repository
         public async Task<bool> UpdatePassword(string email, string newPasswordHash)
         {
             string sql = @"UPDATE Event.Users
-                           SET PasswordHash = @PasswordHash, ResetCode = NULL
+                           SET PasswordHash = @PasswordHash,
+                            VerificationCode = NULL,
+                            CodeExpiration = NULL
                            WHERE Email = @Email";
             return await _dapper.ExecuteSql(sql, new { Email = email, PasswordHash = newPasswordHash });
         }
         public async Task<bool> VerifyUserEmail(string email)
         {
-            string sql = @"UPDATE Event.Users SET IsVerified = 1 WHERE Email = @Email";
+            string sql = @"UPDATE Event.Users SET IsVerified = 1,
+                             VerificationCode = NULL, 
+                             CodeExpiration = NULL
+                            WHERE Email = @Email";
             return await _dapper.ExecuteSql(sql, new { Email = email });
         }
     }

@@ -1,3 +1,4 @@
+using Eventify_High_Performance_Event_Management_API.Dtos;
 using Eventify_High_Performance_Event_Management_API.Repository.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,6 +11,7 @@ namespace Eventify_High_Performance_Event_Management_API.Controller
         private readonly IAuthRepository _authRepo;
         private readonly IEmailService _emailService;
         private readonly IUserRepository _userRepo;
+        private static readonly Random _random  = new();
         public AuthController(IAuthRepository authRepo, IEmailService emailService, IUserRepository userRepo)
         {
             _authRepo = authRepo;
@@ -22,7 +24,7 @@ namespace Eventify_High_Performance_Event_Management_API.Controller
             var user = await _userRepo.GetUserByEmailAsync(email);
             if (user == null) return NotFound("User not found");
 
-            string code = new Random().Next(100000, 999999).ToString();
+            string code = _random.Next(100000, 999999).ToString();
             var expiration = DateTime.Now.AddMinutes(15);
 
             var saved = await _authRepo.SaveVerificationCode(email, code, expiration);
@@ -34,14 +36,14 @@ namespace Eventify_High_Performance_Event_Management_API.Controller
             return BadRequest("Could not process request.");
         }
         [HttpPost("reset-password")]
-        public async Task<IActionResult> ResetPassword(string email, string code, string newPassword)
+        public async Task<IActionResult> ResetPassword(ResetPasswordDto resetPasswordDto)
         {
-            var user = await _authRepo.GetUserByResetCode(email, code);
+            var user = await _authRepo.GetUserByResetCode(resetPasswordDto.Email, resetPasswordDto.Code);
             if (user == null) return BadRequest("Invalid or expired code.");
 
-            string passwordHash = BCrypt.Net.BCrypt.HashPassword(newPassword);
+            string passwordHash = BCrypt.Net.BCrypt.HashPassword(resetPasswordDto.NewPassword);
 
-            var updated = await _authRepo.UpdatePassword(email, passwordHash);
+            var updated = await _authRepo.UpdatePassword(resetPasswordDto.Email, passwordHash);
             if (updated) return Ok("Password updated successfully.");
 
             return BadRequest("Error updating password.");

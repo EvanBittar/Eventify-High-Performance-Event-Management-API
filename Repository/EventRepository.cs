@@ -14,26 +14,19 @@ namespace Eventify_High_Performance_Event_Management_API.Repository
             _dapper = dapper;
         }
 
-        public async Task<IEnumerable<Event>> GetAllEventsAsync()
+        public async Task<IEnumerable<dynamic>> GetAllEventsAsync()
         {
-            string sql = @"SELECT 
-            e.EventId, 
-            e.Title, 
-            e.StartDate, 
-            e.Location,
-            e.Price,
-            ISNULL(AVG(CAST(r.Rating AS DECIMAL(10,2))), 0) AS AverageRating,
-            COUNT(r.ReviewId) AS ReviewsCount
-            FROM Event.Events AS e
-            LEFT JOIN Event.Reviews AS r ON e.EventId = r.EventId
-            GROUP BY 
-            e.EventId, e.Title, e.StartDate, e.Location, e.Price";
-            return await _dapper.LoadData<Event>(sql, new { });
+            string sql = @"SELECT e.*, c.NameCategory, u.Email as OrganizerEmail 
+        FROM Event.Events e
+        JOIN Event.Categories c ON e.CategoryId = c.CategoryId
+        JOIN Event.Users u ON e.CreatedBy = u.UserId
+        WHERE e.IsDeleted = 0";
+            return await _dapper.LoadData<dynamic>(sql, new { });
         }
 
         public async Task<Event?> GetEventByIdAsync(int id)
         {
-            string sql = "SELECT * FROM Event.Events WHERE EventId = @EventId";
+            string sql = "SELECT * FROM Event.Events WHERE EventId = @EventId AND IsDeleted = 0";
             return await _dapper.LoadDataSingle<Event>(sql, new { EventId = id });
         }
 
@@ -117,6 +110,14 @@ namespace Eventify_High_Performance_Event_Management_API.Repository
               ORDER BY AVG(CAST(r.Rating AS DECIMAL)) DESC), 'No Reviews Yet') AS TopRatedEvent";
 
             return await _dapper.LoadDataSingle<DashboardStatsDto>(sql, new { });
+        }
+        public async Task<bool> DeleteEventAsync(int id)
+        {
+            string sql = @"UPDATE Event.Events 
+                   SET IsDeleted = 1 
+                   WHERE EventId = @Id";
+
+            return await _dapper.ExecuteSql(sql, new { Id = id });
         }
     }
 }

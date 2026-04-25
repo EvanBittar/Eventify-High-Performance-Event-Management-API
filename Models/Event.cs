@@ -11,9 +11,10 @@ namespace Eventify_High_Performance_Event_Management_API.Models
         public string Location { get; set; } = string.Empty;
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
-        public decimal Price { get; set; } // أضف هذا
-        public decimal AverageRating { get; set; } // أضف هذا
-        public int ReviewsCount { get; set; } // أضف هذا
+        public decimal Price { get; set; }
+        public decimal AverageRating { get; set; }
+        public int ReviewsCount { get; set; }
+        public bool IsDeleted { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.Now;
     }
 }

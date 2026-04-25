@@ -8,6 +8,7 @@ obj/
 *.user
 
 # Ignore settings that might contain passwords
+appsettings.json
 appsettings.Development.json
 Eventify-High-Performance-Event-Management-API.http
 Eventify-High-Performance-Event-Management-API.sln

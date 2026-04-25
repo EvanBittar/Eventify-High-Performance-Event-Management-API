@@ -145,3 +145,6 @@ ADD VerificationCode NVARCHAR(6) NULL ,
     CodeExpiration DATETIME NULL,
     IsVerified BIT NOT NULL DEFAULT 0,
     ResetCode NVARCHAR(6) NULL;
+GO
+ALTER TABLE Event.Users
+ADD Roles NVARCHAR(50) NOT NULL DEFAULT 'User';

@@ -10,7 +10,12 @@ namespace Eventify_High_Performance_Event_Management_API.Controller
     public class AdminController(IConfiguration config) : ControllerBase
     {
         private readonly DataContext _dapper = new(config);
-
+    [Authorize(Roles = "Admin")]
+    [HttpGet("test")]
+    public IActionResult test()
+        {
+            return Ok("it's work");
+        } 
     [HttpGet("GetAdminStats")]
     public async Task<IActionResult> GetAdminStats()
         {

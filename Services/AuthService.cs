@@ -26,7 +26,7 @@ namespace Eventify_High_Performance_Event_Management_API.Services
                 new Claim(ClaimTypes.Email, user.Email),
                 new Claim("IsVerified", user.IsVerified.ToString()),
                 new Claim("IsAdmin", user.IsAdmin.ToString()),
-                new Claim("Roles" , user.Roles)
+                new Claim(ClaimTypes.Role , user.Roles)
             };
 
             var creds = new SigningCredentials(_key, SecurityAlgorithms.HmacSha512Signature);

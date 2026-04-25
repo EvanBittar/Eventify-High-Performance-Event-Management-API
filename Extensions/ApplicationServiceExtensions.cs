@@ -43,7 +43,7 @@ public static class ApplicationServiceExtensions
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config.GetSection("AppSettings:PasswordKey").Value!)),
                     ValidateIssuer = false,
                     ValidateAudience = false,
-                    RoleClaimType = ClaimTypes.Role
+                    RoleClaimType = "role"
                 };
             });
 
